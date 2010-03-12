@@ -1,0 +1,11 @@
+civKeys = Nile,Amazon,Euphrates
+
+Nile_name = Nile
+Nile_color = RED
+
+Amazon_name = Amazon
+Amazon_color = LEMON
+
+Euphrates_name = Euphrates
+Euphrates_color = BLUE
+
