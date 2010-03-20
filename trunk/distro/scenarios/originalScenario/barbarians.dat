@@ -2,10 +2,10 @@ groupKeys = foragerGroup, ravagingGroup
 
 foragerGroup_name = Forager Group
 foragerGroup_icon = FORAGER_GROUP
-foragerGroup_units = 1 to 2 NOMADS
+foragerGroup_units = 1 to 2 Spearmen
 foragerGroup_age = STONE
 
 ravagingGroup_name = Ravaging Group
 ravagingGroup_icon = RAVAGER_GROUP
-ravagingGroup_units = 1 to 3 STONE_BARBARIANS
+ravagingGroup_units = 1 to 3 Axemen
 ravagingGroup_age = STONE

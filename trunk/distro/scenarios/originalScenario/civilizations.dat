@@ -1,11 +1,36 @@
-civKeys = Nile,Amazon,Euphrates
+civKeys = Nile,Amazon,Yangtze,Mississippi,Congo,Volga,Danube
 
 Nile_name = Nile
 Nile_color = RED
+Nile_leaderName = Tutankamon
+Nile_cities = Memphis,Cairo,Ramur
 
 Amazon_name = Amazon
-Amazon_color = LEMON
+Amazon_color = LIME
+Amazon_leaderName = Nutibara
+Amazon_cities = Upapa,Papala,Ocore
 
-Euphrates_name = Euphrates
-Euphrates_color = BLUE
+Yangtze_name = Yangtze
+Yangtze_color = YELLOW
+Yangtze_leaderName = XiOn
+Yangtze_cities = Beihan,XiOnU,Yoe
 
+Mississippi_name = Mississippi
+Mississippi_color = BLUE
+Mississippi_leaderName = Toma Hawk
+Mississippi_cities = Sippi,Missi
+
+Congo_name = Congo
+Congo_color = GRAY
+Congo_leaderName = Zulu
+Congo_cities = Congo,Caira
+
+Volga_name = Volga
+Volga_color = MAGENTA
+Volga_leaderName = Merredth
+Volga_cities = Berlan,Parith
+
+Danube_name = Danube
+Danube_color = CYAN
+Danube_leaderName = Oxhan
+Danube_cities = Berlan,Parith
