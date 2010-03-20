@@ -1,5 +1,7 @@
 package net.slashie.ruler.action.player;
 
+import net.slashie.ruler.ai.CivSelector;
+import net.slashie.ruler.domain.entities.Unit;
 import net.slashie.ruler.domain.entities.UnitGroup;
 import net.slashie.ruler.domain.world.WorldLevel;
 import net.slashie.serf.action.Action;
@@ -20,16 +22,16 @@ public class Settle extends Action{
 		if (u.canSettle()){
 			// Check if there's a settlement here already
 			if (((WorldLevel)u.getLevel()).getCityAt(u.getPosition()) != null){
-				u.getLevel().addMessage("There's a city here already");
+				youMessage("There's a settlement here already");
 				return;
 			}
-			if (UserInterface.getUI().promptChat("Do you want to create a settlement? (Y/N)")){
+			if (((CivSelector)performer.getSelector()).doYouWantToCreateASettlement()){
 				//Choose a name for the settlement
-				String name = UserInterface.getUI().inputBox("How should we call this settlement?");
+				String name = ((CivSelector)performer.getSelector()).chooseNameForSettlement();
 				((WorldLevel)u.getLevel()).addSettlement(name, u.getPosition(), u.getCivilization());
 				//Reduce one settler from the group
-				u.reduceUnitOfClassifier("SETTLER");
-				u.getLevel().addMessage("After a month of work, you create a settlement!");
+				u.reduceUnitOfClassifier(Unit.SETTLER_ID);
+				youMessage(name+" has been founded!");
 			} else {
 				actionCancelled = true;
 				return;
@@ -56,6 +58,5 @@ public class Settle extends Action{
 			return false;
 		}
 		return true;
-		
 	}
 }

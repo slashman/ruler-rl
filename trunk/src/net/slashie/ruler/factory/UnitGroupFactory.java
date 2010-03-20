@@ -6,6 +6,10 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Properties;
 
+import net.slashie.ruler.action.player.Walk;
+import net.slashie.ruler.ai.unitGroup.BarbarianAI;
+import net.slashie.ruler.ai.unitGroup.CivilizationAI;
+import net.slashie.ruler.controller.Game;
 import net.slashie.ruler.domain.entities.Civilization;
 import net.slashie.ruler.domain.entities.CivilizationDefinition;
 import net.slashie.ruler.domain.entities.UnitGroup;
@@ -42,10 +46,10 @@ public class UnitGroupFactory {
 		}
 	}
 	
-	public static UnitGroup getUnitGroup (CivilizationDefinition civ, Age age){
+	public static UnitGroup getBarbarianUnitGroup (Civilization civ, Age age){
 		UnitGroupDef def = groupDefinitions.get(pickRandomGroupIdFromAge(age));
 		UnitGroup ret = new UnitGroup(civ);
-		//ret.setAppearanceId(def.getApperanceId());
+		ret.setAppearanceId("GROUP_"+civ.getCivDefinition().getColor().toString());
 		ret.setName(def.getName());
 		List<Pair<String, Pair<Integer, Integer>>> units = def.getUnits();
 		for (Pair<String, Pair<Integer, Integer>> unit: units){
@@ -55,8 +59,14 @@ public class UnitGroupFactory {
 				ret.addUnit(ItemFactory.createItem(unitId));
 			}
 		}
+		ret.setSelector(new BarbarianAI(Game.getCurrentGame().getPlayer(), new Walk()));
+		ret.setBarbarian(true);
 		return ret;
 	}
+	
+
+	
+	
 
 	private static String pickRandomGroupIdFromAge(Age age) {
 		List<String> groupIds = groupsByAge.get(age);

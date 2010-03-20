@@ -12,7 +12,7 @@ public class LevelMaster {
 		WorldLevel ret = null;
 		String levelID = levelMetaData.getLevelID();
 		if (levelID.startsWith("WORLD")){
-			ret = WorldGenerator.generateWorld(levelID, 40, 40);
+			ret = WorldGenerator.generateWorld(levelID, 250, 250);
 
 		} 
 		

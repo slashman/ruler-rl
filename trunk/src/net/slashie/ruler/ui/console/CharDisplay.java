@@ -10,6 +10,7 @@ import net.slashie.serf.sound.STMusicManagerNew;
 import net.slashie.ruler.domain.entities.Civilization;
 import net.slashie.ruler.domain.entities.CivilizationColors;
 import net.slashie.ruler.domain.entities.CivilizationDefinition;
+import net.slashie.ruler.domain.world.Age;
 import net.slashie.ruler.factory.CivilizationGenerator;
 import net.slashie.ruler.ui.Display;
 import net.slashie.utils.OutParameter;
@@ -141,5 +142,17 @@ public class CharDisplay extends Display{
 		csi.refresh();
 		csi.waitKey(CharKey.SPACE);
 		csi.restore();
+	}
+	
+	@Override
+	public void showAgeUp(Civilization civ, Age currentAge) {
+		csi.saveBuffer();
+		csi.cls();
+		csi.print(2,2, civ.getCivDefinition().getCivilizationName()+" has reached the "+currentAge.getDescription()+"!");
+		csi.print(2,4, "Press space to continue", ConsoleSystemInterface.WHITE);
+		csi.refresh();
+		csi.waitKey(CharKey.SPACE);
+		csi.restore();
+		csi.refresh();
 	}
 }

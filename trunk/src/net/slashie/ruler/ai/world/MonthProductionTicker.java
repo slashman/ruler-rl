@@ -12,9 +12,9 @@ import net.slashie.serf.action.Actor;
 import net.slashie.util.Pair;
 import net.slashie.utils.Util;
 
-public class MonthTicker implements ActionSelector{
+public class MonthProductionTicker implements ActionSelector{
 	public ActionSelector derive() {
-		return new MonthTicker();
+		return new MonthProductionTicker();
 	}
 	
 	public String getID() {
@@ -29,13 +29,14 @@ public class MonthTicker implements ActionSelector{
 		static MonthTickAction thus = new MonthTickAction();
 		
 		@Override
-		public void execute() {
-			//Get all settlements in the world and produce specialists, probably
+		public void execute(){
+			//Advance in the production of units all around the globe
 			List<City> cities = ((WorldLevel)performer.getLevel()).getCities();
 			for (City city: cities){
-				if (Util.chance(80))
-					city.trySpecialists();
+				city.advanceProduction();
+				city.advanceScience();
 			}
+			
 		}
 		
 		@Override

@@ -126,10 +126,12 @@ public class Game extends SworeGame{
 	public boolean isEnemy(UnitGroup group) {
 		if (group.isBarbarian())
 			return true;
-		if (((UnitGroup)getPlayer()).getCivilization().hasEnemy(group.getCivilization())){
+		/*if (((UnitGroup)getPlayer()).getCivilization().hasEnemy(group.getCivilization())){
 			return true;
-		}
 		return false;
+		}*/
+		return group.getCivilization() != ((UnitGroup)getPlayer()).getCivilization();
+		
 	}
 	
 	@Override

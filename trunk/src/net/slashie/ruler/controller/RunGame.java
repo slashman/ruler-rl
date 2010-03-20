@@ -1,11 +1,17 @@
 package net.slashie.ruler.controller;
 
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Properties;
 
 import javax.sound.midi.MidiSystem;
@@ -19,7 +25,6 @@ import net.slashie.serf.SworeException;
 import net.slashie.serf.action.Action;
 import net.slashie.serf.action.ActionFactory;
 import net.slashie.serf.game.SworeGame;
-import net.slashie.serf.level.FeatureFactory;
 import net.slashie.serf.level.MapCellFactory;
 import net.slashie.serf.sound.SFXManager;
 import net.slashie.serf.sound.STMusicManagerNew;
@@ -34,19 +39,37 @@ import net.slashie.serf.ui.UserInterface;
 import net.slashie.serf.ui.consoleUI.ConsoleUISelector;
 import net.slashie.serf.ui.consoleUI.ConsoleUserInterface;
 import net.slashie.serf.ui.consoleUI.effects.CharEffectFactory;
+import net.slashie.ruler.action.player.AddUnitToGroup;
+import net.slashie.ruler.action.player.AssembleUnit;
 import net.slashie.ruler.action.player.AttackUnitGroup;
+import net.slashie.ruler.action.player.Buildroad;
+import net.slashie.ruler.action.player.DisbandUnit;
+import net.slashie.ruler.action.player.EstablishTradeRoute;
+import net.slashie.ruler.action.player.GarrisonUnit;
+import net.slashie.ruler.action.player.InfluenceCity;
+import net.slashie.ruler.action.player.LoadResource;
 import net.slashie.ruler.action.player.SetAttackingUnit;
 import net.slashie.ruler.action.player.Settle;
 import net.slashie.ruler.action.player.Walk;
 import net.slashie.ruler.data.dao.EntitiesDAO;
+import net.slashie.ruler.domain.entities.ResourceCarrier;
+import net.slashie.ruler.domain.entities.Specialist;
+import net.slashie.ruler.domain.entities.Unit;
+import net.slashie.ruler.domain.world.Age;
+import net.slashie.ruler.domain.world.Resource;
 import net.slashie.ruler.factory.CivilizationGenerator;
 import net.slashie.ruler.factory.ItemFactory;
 import net.slashie.ruler.factory.UnitGroupFactory;
 import net.slashie.ruler.ui.Display;
+import net.slashie.ruler.ui.RulerAppearanceFactory;
 import net.slashie.ruler.ui.console.CharDisplay;
 import net.slashie.ruler.ui.console.CharEffects;
+import net.slashie.ruler.ui.console.CharRulerAppearanceFactory;
 import net.slashie.ruler.ui.console.RulerCharUserInterface;
 import net.slashie.ruler.ui.console.RulerConsoleUISelector;
+import net.slashie.util.FileUtil;
+import net.slashie.util.Pair;
+import net.slashie.utils.roll.Roll;
 import net.slashie.utils.sound.midi.STMidiPlayer;
 
 public class RunGame {
@@ -86,7 +109,6 @@ public class RunGame {
 				initializeActions();
 				
 				System.out.println("Loading Data");
-				initializeItems();
 				initializeCells();
 				System.out.println("Initializing Scenario");
 				initializeScenario(configuration);
@@ -124,13 +146,14 @@ public class RunGame {
 					isConsole = true;
 					System.out.println("Initializing Swing Console System Interface");
 					csi = null;
-					csi = new WSwingConsoleInterface("RULER - Santiago Zapata, 2010");
+					csi = new WSwingConsoleInterface("RULER - Santiago Zapata, 2010", configuration);
 				}
 				
 				if (isConsole){
 					System.out.println("Initializing Console User Interface");
 					UserInterface.setSingleton(new RulerCharUserInterface(csi));
 					Display.thus = new CharDisplay(csi);
+					RulerAppearanceFactory.thus = new CharRulerAppearanceFactory();
 					EffectFactory.setSingleton(new CharEffectFactory());
 					((CharEffectFactory)EffectFactory.getSingleton()).setEffects(new CharEffects().getEffects());
 					ui = UserInterface.getUI();
@@ -182,6 +205,24 @@ public class RunGame {
     	}
 	}
 	
+	private static Font loadFont() {
+		try {
+			Font ret = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(new File("res/MONOFONT.TTF"))).deriveFont(Font.PLAIN, 10);
+			return ret;
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FontFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return new Font("Monospaced", Font.PLAIN, 10);
+
+	}
+
 	private static void initializeScenario(Properties configuration) throws IOException{
 		Properties civs = new Properties();
 		civs.load(new FileInputStream("scenarios/"+configuration.getProperty("useScenario")+"/civilizations.dat"));
@@ -190,9 +231,60 @@ public class RunGame {
 		civs.load(new FileInputStream("scenarios/"+configuration.getProperty("useScenario")+"/barbarians.dat"));
 		UnitGroupFactory.init(civs);
 		
+		BufferedReader itemsReader = FileUtil.getReader("scenarios/"+configuration.getProperty("useScenario")+"/units.csv");
+		String rowS = itemsReader.readLine();
+		rowS = itemsReader.readLine();
+		rowS = itemsReader.readLine();
+
+		List<Unit> unitDefinitions = new ArrayList<Unit>();
+		while (rowS != null){
+			//System.out.println(rowS);
+			String[] row = rowS.split(",");
+			if (row[3].equals("Commerce")){
+				unitDefinitions.add(new ResourceCarrier(row[0], row[4], i(row[7]), new Roll(row[5]), new Roll(row[6]) , i(row[8]), i(row[9]), row [10].equals("true") , 
+						getAge(row[1]), getResources(row), getSpecialists(row)));
+			} else {
+				unitDefinitions.add(new Unit(row[0], row[4], i(row[7]), new Roll(row[5]), new Roll(row[6]) , i(row[8]), i(row[9]), row [10].equals("true") , 
+							row [11].equals("true"), getAge(row[1]), getResources(row), getSpecialists(row)));
+			}
+			rowS = itemsReader.readLine();			
+		}
+		
+		ItemFactory.init(unitDefinitions.toArray(new Unit[unitDefinitions.size()]));
 	}
 	
 	
+	private static Age getAge(String string) {
+		return Age.valueOf(string);
+	}
+
+	private static List<Pair<Resource, Integer>> getResources(String[] row) {
+		List<Pair<Resource, Integer>> ret = new ArrayList<Pair<Resource,Integer>>();
+		ret.add(new Pair<Resource, Integer> (Resource.FOOD, i(row[12])));
+		ret.add(new Pair<Resource, Integer> (Resource.HORSES, i(row[13])));
+		ret.add(new Pair<Resource, Integer> (Resource.WOOD, i(row[14])));
+		ret.add(new Pair<Resource, Integer> (Resource.IRON_ORE, i(row[15])));
+		ret.add(new Pair<Resource, Integer> (Resource.OIL, i(row[16])));
+		return ret;
+	}
+
+	private static List<Pair<Specialist, Integer>> getSpecialists(String[] row) {
+		List<Pair<Specialist, Integer>> ret = new ArrayList<Pair<Specialist,Integer>>();
+		ret.add(new Pair<Specialist, Integer> (Specialist.SOLDIER, i(row[17])));
+		ret.add(new Pair<Specialist, Integer> (Specialist.TINKER, i(row[18])));
+		ret.add(new Pair<Specialist, Integer> (Specialist.MECHANIC, i(row[19])));
+		ret.add(new Pair<Specialist, Integer> (Specialist.ENGINEER, i(row[20])));
+		ret.add(new Pair<Specialist, Integer> (Specialist.TRADER, i(row[21])));
+		return ret;
+	}
+
+	private static int i(String string) {
+		if (string.equals(""))
+			return 0;
+		return Integer.parseInt(string);
+	}
+
+
 	private static Properties configuration;
 	private static Properties UIconfiguration;
 	private static String uiFile;
@@ -280,15 +372,34 @@ public class RunGame {
 		Action attackAction = new AttackUnitGroup();
 		Action settle = new Settle();
 		Action setAttackingUnit = new SetAttackingUnit();
+		Action assembleUnit = new AssembleUnit();
+		Action influenceCity = new InfluenceCity();
+		Action addToGroup = new AddUnitToGroup();
+		Action loadResource = new LoadResource();
+		Action trade = new EstablishTradeRoute();
+		Action garrison = new GarrisonUnit();
+		Action buildRoad = new Buildroad();
+		Action disband = new DisbandUnit();
+
+
 		UserAction[] userActions = new UserAction[] {
 		    new UserAction(settle, CharKey.s),
-		    new UserAction(setAttackingUnit, CharKey.a)
+		    new UserAction(setAttackingUnit, CharKey.f),
+		    new UserAction(influenceCity, CharKey.i),
+		    new UserAction(assembleUnit, CharKey.c),
+		    new UserAction(loadResource, CharKey.l),
+		    new UserAction(trade, CharKey.t),
+		    new UserAction(addToGroup, CharKey.e),
+		    new UserAction(buildRoad, CharKey.b),
+		    new UserAction(garrison, CharKey.g),
+		    new UserAction(disband, CharKey.d)
+
 		};
 
 		UserCommand[] userCommands = new UserCommand[]{
 			new UserCommand(CommandListener.PROMPTQUIT, CharKey.Q),
 			//new UserCommand(CommandListener.HELP, CharKey.F1),
-			new UserCommand(CommandListener.LOOK, CharKey.e),
+			new UserCommand(CommandListener.LOOK, CharKey.E),
 			new UserCommand(CommandListener.PROMPTSAVE, CharKey.S),
 			//new UserCommand(CommandListener.HELP, CharKey.h),
 			//new UserCommand(CommandListener.SHOWINVEN, CharKey.i),
@@ -355,6 +466,7 @@ public class RunGame {
 	private static void initializeActions(){
 		ActionFactory af = ActionFactory.getActionFactory();
 		Action[] definitions = new Action[]{
+				new AttackUnitGroup()
 		};
 		for (int i = 0; i < definitions.length; i++)
 			af.addDefinition(definitions[i]);
@@ -364,9 +476,7 @@ public class RunGame {
 		MapCellFactory.getMapCellFactory().init(EntitiesDAO.getCellDefinitions(AppearanceFactory.getAppearanceFactory()));
 	}
 
-	private static void initializeItems(){
-		ItemFactory.init(EntitiesDAO.getItemDefinitions(AppearanceFactory.getAppearanceFactory()));
-	}
+	
 
     public static void crash(String message, Throwable exception){
     	System.out.println(GameInfo.getName() + GameInfo.getVersion()+": Error");
