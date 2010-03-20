@@ -26,10 +26,7 @@ public class WorldLevel extends BufferedLevel {
 		//getCells()[position.z][position.x][position.y] = MapCellFactory.getMapCellFactory().getMapCell("SETTLEMENT_1_"+civ.getCivDefinition().getColor().toString());
 		City city = new City(name, 1, civ);
 		city.setPosition(new Position(position));
-		addFeature(city);
-		city.calculateResources();
-		cities.put(position, city);
-		citiesL.add(city);
+		addSettlement(city);
 	}
 	
 	public boolean isWater(Position p){
@@ -52,5 +49,36 @@ public class WorldLevel extends BufferedLevel {
 
 	public List<City> getCities() {
 		return citiesL;
+	}
+
+	public void addSettlement(City city) {
+		addFeature(city);
+		city.calculateResources();
+		cities.put(city.getPosition(), city);
+		citiesL.add(city);
+	}
+	
+	public void addWorldMessage(WorldMessage message){
+		if (message.getPerformer() == getPlayer()){
+			addMessage(message.getYouMessage());
+		} else {
+			if (Position.distance(message.getPosition(), getPlayer().getPosition()) <= WorldMessage.MESSAGE_RANGE){
+				addMessage(message.getTheMessage());
+			}
+		}
+		
+	}
+
+	
+	public int getResourcesAround(Position position, Resource resource, int range) {
+		int count = 0;
+		for (int x = position.x - range; x <= position.x + range; x++){
+			for (int y = position.y - range; y <= position.y + range; y++){
+				if (!isValidCoordinate(x, y))
+					continue;
+				count += getResourcesAt(x,y,resource);
+			}
+		}
+		return count;
 	}
 }

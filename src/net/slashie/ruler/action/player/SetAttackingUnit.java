@@ -23,7 +23,12 @@ public class SetAttackingUnit extends Action{
 	@Override
 	public void execute() {
 		((UnitGroup) performer).setAttackingUnit((Unit)targetItem);
-		performer.getLevel().addMessage("Your "+((Unit)targetItem).getDescription()+" lead the attack");
+		youMessage("Your "+((Unit)targetItem).getDescription()+" lead the attack");
+	}
+	
+	@Override
+	public int getCost() {
+		return 0;
 	}
 
 }

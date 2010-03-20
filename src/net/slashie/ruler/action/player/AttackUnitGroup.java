@@ -27,7 +27,7 @@ public class AttackUnitGroup extends Action{
 		UnitGroup attackingGroup = (UnitGroup) performer;
 		//Get the target Unit Group
 		Position var = directionToVariation(targetDirection);
-        Position destinationPoint = Position.add(performer.getPosition(), var);
+		Position destinationPoint = Position.add(performer.getPosition(), var);
         setPosition(destinationPoint);
         
         UnitGroup defendingGroup = (UnitGroup) performer.getLevel().getActorAt(destinationPoint);
@@ -41,7 +41,10 @@ public class AttackUnitGroup extends Action{
 		
 		// Select the defending unit
         Unit defendingUnit = defendingGroup.getDefendingUnit();
-        
+        if (defendingUnit == null){
+        	youMessage("No one to attack.");
+        	return;
+        }
         // Calculate the rounds
         int attackRounds = attackingUnit.getAttackTurns();
         int counterRounds = defendingUnit.getAttackTurns() - attackingUnit.getAttackTurns();
@@ -71,11 +74,11 @@ public class AttackUnitGroup extends Action{
         		theyMessage("Your "+defendingUnit.getDescription()+" counterattack, but lose...");
         	}
         }
-        
-        
-        
 	}
 	
-	
-
+	@Override
+	public int getCost() {
+		UnitGroup p = (UnitGroup) performer;
+		return p.getSpeed();
+	}
 }

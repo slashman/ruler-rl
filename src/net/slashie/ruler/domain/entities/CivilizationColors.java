@@ -6,6 +6,11 @@ public enum CivilizationColors implements Serializable {
 	BLUE,
 	RED,
 	GREEN,
-	LEMON;
+	LIME,
+	BROWN,
+	YELLOW,
+	CYAN, 
+	GRAY,
+	MAGENTA;
 	
 }

@@ -23,7 +23,7 @@ public class DayTicker implements ActionSelector{
 		
 		@Override
 		public void execute() {
-			Game.getCurrentGame().advanceDays(1);
+			Game.getCurrentGame().advanceDays(10);
 		}
 		
 		@Override
