@@ -1,0 +1,37 @@
+0,1,2,3,4,5,6,7,8,9,10,11,Resource,,,,,Specialist,,,,,,limit
+identifier,Age,Age Speed,Type,Name,Attack,Defense,HP,Attack Times,Movement Cost,isWater,isSettler,Food,Horses,Wood,Iron Ore,Oil,Warrior,Tinker,Mechanic,Engineer,Trader,isTrader,.
+Axemen,STONE,1,Cheap Infantry,Axemen,1D3,1D1,2,1,10,false,false,1,,,,,2,,,,,,.
+Riders,STONE,1,Quick Infrantry,Riders,1D3,1D1,2,2,9,false,false,1,1,,,,4,,,,,,.
+Spearmen,STONE,1,Defense,Spearmen,1D1,1D3,2,1,10,false,false,1,,,,,2,,,,,,.
+Sledgemen,STONE,1,Siege,Sledgemen,2D2,1D1,1,1,10,false,false,1,,1,,,4,,,,,,.
+Boat,STONE,1,Water,Boat,1D1,1D1,1,1,10,true,false,1,,1,,,1,2,,,,,.
+Legion,IRON,2,Cheap Infantry,Legion,1D4,1D2,2,1,9,false,false,1,,,1,,4,,,,,,.
+Charriots,IRON,2,Quick Infrantry,Charriots,2D2,1D2,2,2,7,false,false,1,2,,1,,4,,,,,,.
+Phalanx,IRON,2,Defense,Phalanx,1D2,2D2,3,1,9,false,false,2,,,1,,4,,,,,,.
+Catapult,IRON,2,Siege,Catapult,2D3,1D1,1,1,9,false,false,2,,2,,,,4,,,,,.
+Trireme,IRON,2,Water,Trireme,2D2,1D2,2,2,7,true,false,2,,1,,,4,4,,,,,.
+Swordsmen,MEDIEVAL,2,Cheap Infantry,Swordsmen,2D2,1D3,3,1,9,false,false,2,,,1,,5,,,,,,.
+Knights,MEDIEVAL,2,Quick Infrantry,Knights,2D3,1D3,3,2,7,false,false,3,2,,1,,8,,,,,,.
+Lancers,MEDIEVAL,2,Defense,Lancers,1D4,2D3,4,1,9,false,false,3,,,1,,5,,,,,,.
+Onager,MEDIEVAL,2,Siege,Onager,2D4,1D2,2,1,9,false,false,3,,1,1,,5,2,,,,,.
+Frigate,MEDIEVAL,2,Water,Frigate,2D3,2D3,3,2,7,true,false,3,,3,,,5,4,,,,,.
+Musketeer,INDUSTRIAL,3,Cheap Infantry,Musketeer,2D3,1D4,4,1,8,false,false,2,,,2,,6,,,,,,.
+Dragoon,INDUSTRIAL,3,Quick Infrantry,Dragoon,2D3,1D3,4,2,5,false,false,3,2,,2,,6,,,,,,.
+Rifleman,INDUSTRIAL,3,Defense,Rifleman,2D2,2D4,5,1,8,false,false,3,,,2,,6,,,,,,.
+Artillery,INDUSTRIAL,3,Siege,Artillery,5D2,1D2,3,1,8,false,false,3,,,4,,4,,5,,,,.
+Steamboat,INDUSTRIAL,3,Water,Steamboat,4D2,2D4,4,2,5,true,false,3,,,4,2,10,,10,,,,.
+SMG Commando,MODERN,4,Cheap Infantry,SMG Commando,4D2,2D3,5,1,7,false,false,3,,,4,,10,,,,,,.
+Boogie Commando,MODERN,4,Quick Infantry,Boogie Commando,4D2,2D3,5,2,3,false,false,3,,,6,2,10,,10,,,,.
+Urban Forces,MODERN,4,Defense,Urban Forces,2D2,2D5,6,1,7,false,false,4,,,4,2,10,,,,,,.
+Armored Tanks,MODERN,4,Siege,Armored Tanks,5D3,2D3,4,2,3,false,false,4,,,10,5,5,,15,,,,.
+Destroyer,MODERN,4,Water,Destroyer,6D3,4D3,5,2,3,true,false,4,,,15,10,15,,15,,,,.
+Warrior Troop,FUTURE,5,Cheap Infantry,Warrior Troop,5D2,2D3,6,1,6,false,false,4,,,6,5,10,,5,,,,.
+Phantom Mecha,FUTURE,5,Quick Infrantry,Phantom Mecha,5D2,2D3,6,1,6,false,false,5,,,10,5,10,,10,,,,.
+ADS Unit,FUTURE,5,Defense,ADS Unit,5D2,2D5,7,1,6,false,false,5,,,10,10,10,,15,,,,.
+Laser Cannon,FUTURE,5,Siege,Laser Cannon,6D3,2D3,5,1,6,false,false,5,,,15,20,15,,20,,,,.
+Typhoon USV,FUTURE,5,Water,Typhoon USV,7D3,4D3,6,2,1,true,false,5,,,20,20,15,,20,,,,.
+Caravan,STONE,1,Commerce,Caravan,1D1,1D2,1,1,10,false,false,2,1,,,,,,,,2,,.
+Truck Caravan,MODERN,4,Commerce,Truck Caravan,1D1,2D4,1,1,7,false,false,2,,,5,1,,,,,5,,.
+SETTLER,STONE,1,Settlement,Settler,1D1,1D1,1,1,10,false,true,2,,,,,,,,,,,.
+Emmigrants,MEDIEVAL,3,Settlement,Emmigrants,1D1,1D1,1,1,8,false,true,5,,,5,1,,,,,,,.
+WORKERS,STONE,1,Settlement,Workers,1D1,1D1,1,1,10,false,true,2,,,,,,,,,,,.
